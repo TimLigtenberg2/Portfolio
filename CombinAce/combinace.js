@@ -46,7 +46,6 @@ $(function() {
     // TODO: alle kaarten 'pile' laten zien en er zichtbaar één afhalen wanneer je een kaart pakt
     // TODO: kaarten pakken en leggen met een mooie animatie doen
     // TODO: regels.txt ANDERE SPECIALE KAARTEN EN REGELS implementeren
-    // TODO: als je hovert over deck van een bot, laat zien hoeveel kaarten die heeft
 
     handCardsDiv = $('#hand-cards');//.sortable();
     handCardsDivBot1 = $('#hand-cards-bot1');
@@ -123,7 +122,7 @@ function getLuckyNumber() {
         luckyNumberText.fadeOut('slow', function() {
             $(this).appendTo("#menu").fadeIn('slow');
             luckyNumberText.html(`
-                <span style='color: black; text-shadow: none;'>
+                <span style='color: white; text-shadow: none;'>
                     Your lucky number: 
                 </span>
                 <span style='text-shadow: 0 0 2px black;'>
@@ -242,7 +241,7 @@ function getCardView(card) {
         if(event.button == 0) {
             event.preventDefault();
             playcard(card);
-            //clearCombination();
+            clearCombination();
         }
     });
     // right mouse button click
@@ -655,6 +654,8 @@ function dealCardsBots(amount) {
         cardsBot2.push(dealtCard);
         handCardsDivBot2.append(getCardViewHidden(dealtCard));
     }
+
+    setBotHovers();
 }
 
 function dealCardsBot(amount) {
@@ -671,6 +672,8 @@ function dealCardsBot(amount) {
             handCardsDivBot2.append(getCardViewHidden(dealtCard));
         }
     }
+
+    setBotHovers();
 }
 
 function getCardViewHidden() {
@@ -796,6 +799,7 @@ function playCardBot(card) {
     
     cardView.appendTo(cardPileDiv);
     nextPlayerTurn();
+    setBotHovers();
 }
 
 function drawCardBot() {
@@ -858,4 +862,9 @@ function sortCardsInHand(sortMethod) {
     });
 
     console.log("sortedCards", sortedCards);
+}
+
+function setBotHovers() {
+    $('#bot1').attr('title', `${cardsBot1.length} cards`);
+    $('#bot2').attr('title', `${cardsBot2.length} cards`);
 }
