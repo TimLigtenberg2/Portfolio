@@ -46,6 +46,7 @@ $(function() {
     // TODO: alle kaarten 'pile' laten zien en er zichtbaar één afhalen wanneer je een kaart pakt
     // TODO: kaarten pakken en leggen met een mooie animatie doen
     // TODO: regels.txt ANDERE SPECIALE KAARTEN EN REGELS implementeren
+    // TODO: als je hovert over deck van een bot, laat zien hoeveel kaarten die heeft
 
     handCardsDiv = $('#hand-cards');//.sortable();
     handCardsDivBot1 = $('#hand-cards-bot1');
@@ -72,21 +73,21 @@ $(function() {
         $("#draw-buttons").css("display", "flex");
         //$("#lucky-number").clone().appendTo("#menu");
         
-        setCards(2);
+        createCards(2);
         dealCards(15);
-        dealCardsBots(8); // TODO: 15
+        dealCardsBots(15);
     }
 
     drawCardBtn.on('click', function(event) {
         if(playerTurn !== 1) {
-            showFeedback("It's not your turn.", "error");
+            showFeedback("It's not your turn.", "error", 2);
             return;
         }
         if(drawCards === null && event.button == 0) {
             event.preventDefault();
             dealCards(1);
+            clearCombination();
             nextPlayerTurn();
-            //TODO: clearCombination();
         } else {
             if(drawCards.dice) {
                 rollDiceToDraw(drawCards.amount);
@@ -121,7 +122,13 @@ function getLuckyNumber() {
         $("#lucky-number-container").fadeOut('slow');
         luckyNumberText.fadeOut('slow', function() {
             $(this).appendTo("#menu").fadeIn('slow');
-            luckyNumberText.html(`<span style='color: black; text-shadow: none;'>Your lucky number: </span>${luckyNumber}`);
+            luckyNumberText.html(`
+                <span style='color: black; text-shadow: none;'>
+                    Your lucky number: 
+                </span>
+                <span style='text-shadow: 0 0 2px black;'>
+                    ${luckyNumber}
+                </span>`);
             luckyNumberText.css('margin', 'auto');
         });
     }, 500);
@@ -141,7 +148,7 @@ function rollDiceResult(res) {
     dealCards(amount);
 }
 
-function setCards(packs) {
+function createCards(packs) {
     // for the amount of decks
     for(let i = 1; i <= packs; i++) {
         // for every type: spades, hearts...
@@ -193,7 +200,7 @@ function getCardValue(num) {
 function dealCards(amount) {
     for (let i = 0; i < amount; i++) {
         if(deck.length === 0) {
-            showFeedback("There are no more cards to draw.", "error");
+            showFeedback("There are no more cards to draw.", "error", 2);
             break;
         }
 
@@ -266,11 +273,11 @@ function getCardView(card) {
 
 function playcard(card, combination = false) {
     if(playerTurn !== 1) {
-        showFeedback("It's not your turn.", "error");
+        showFeedback("It's not your turn.", "error", 2);
         return;
     }
     if(!combination && !validCard(card)) {
-        showFeedback("You can't play this card.", "error");
+        showFeedback("You can't play this card.", "error", 2);
         return;
     }
 
@@ -338,7 +345,7 @@ function getCombinationPoints() {
 function addToCombination(card) {
     if(drawCards !== null) return;
     if(card.type === JOKER && combinationCards.find(card => card.type === "JOKER")) {
-        showFeedback("You can't use more than one joker in a combination", "error");
+        showFeedback("You can't use more than one joker in a combination", "error", 2);
         return;
     }
 
@@ -435,7 +442,7 @@ function clearCombination() {
 
 function playCombination() {
     if(playerTurn !== 1) {
-        showFeedback("It's not your turn.", "error");
+        showFeedback("It's not your turn.", "error", 2);
         return;
     }
 
@@ -448,7 +455,7 @@ function playCombination() {
             clearCombination();
             nextPlayerTurn();
         } else {
-            showFeedback("This is not a valid combination.", "error");
+            showFeedback("This is not a valid combination.", "error", 2);
         }
     }
 }
@@ -812,9 +819,11 @@ function rollDiceResultBot(res) {
     dealCardsBot(amount);
 }
 
-// function to sort all cards in hand.
-// sortMethod 1: sort by number (A, K , ... 4, 3, 2)
-// sortMethod 2: sort by type (hearts, spades, clubs, diamonds)
+/**
+* function to sort all cards in hand.
+* sortMethod 1: sort by number (A, K , ... 4, 3, 2)
+* sortMethod 2: sort by type (hearts, spades, clubs, diamonds)
+*/
 function sortCardsInHand(sortMethod) {
     let filteredCards = cards.filter(card => 
         !combinationCards.some(combinationCard => 
@@ -828,7 +837,6 @@ function sortCardsInHand(sortMethod) {
     if (sortMethod === 1) {
         sortedCards = filteredCards.sort((a, b) => a.cardNumber - b.cardNumber);
     }
-
     // sort by type
     else if (sortMethod === 2) {
         sortedCards = filteredCards.sort((a, b) => {
@@ -839,7 +847,6 @@ function sortCardsInHand(sortMethod) {
             }
         });
     }
-
     // invalid sort method
     else {
         sortedCards = filteredCards;

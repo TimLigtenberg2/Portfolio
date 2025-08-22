@@ -7,19 +7,26 @@ $(function(){
     });
 });
 
-function showFeedback(message, type) {
+function showFeedback(message, type, duration = null) {
     let widget = $('#feedback');
     let messageElement = $('#feedbackMessage');
 
     widget.css('display', 'block');
     messageElement.text(message);
 
+    widget.removeClass('alert-success alert-danger alert-info');
     if (type === 'success') {
-        widget.removeClass('alert-danger alert-info').addClass('alert-success');
+        widget.addClass('alert-success');
     } else if (type === 'error') {
-        widget.removeClass('alert-success alert-info').addClass('alert-danger');
+        widget.addClass('alert-danger');
     } else if (type === 'info') {
-        widget.removeClass('alert-danger alert-success').addClass('alert-info');
+        widget.addClass('alert-info');
+    }
+
+    if (typeof duration === 'number' && duration > 0) {
+        setTimeout(() => {
+            widget.fadeOut();
+        }, duration * 1000);
     }
 }
 
