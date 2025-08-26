@@ -18,6 +18,7 @@
 
     <script src="../index.js"></script>
     <script src="minesweeper.js"></script>
+    <script src="../translate.js"></script>
   </head>
   <body>
     <header class="header">
@@ -26,12 +27,12 @@
       </div>
 
       <div class="header-item-container">
-        <span class="header-item-title">Difficulty</span>
+        <span class="header-item-title" data-i18n="difficulty">Difficulty</span>
         <select class="header-item-value" id="difficultySelect" name="difficultySelect" title="Select difficulty"></select>
       </div>
 
       <div class="header-item-container">
-        <span class="header-item-title">Theme</span>
+        <span class="header-item-title" data-i18n="theme">Theme</span>
         <select class="header-item-value" id="themeSelect" name="themeSelect" title="Select theme"></select>
       </div>
 
@@ -41,11 +42,11 @@
       </div>
 
       <div class="header-item-container">
-        <span class="header-item-title">Leaderboard</span>
-        <button class="header-item-value" id="showGamesBtn">Show</button>
+        <span class="header-item-title" data-i18n="scoreboard">Scoreboard</span>
+        <button class="header-item-value" id="showGamesBtn" data-i18n="show">Show</button>
 
         <div id="leaderboard" style="display: none;">
-          <span class="h1"><span id="games-won"></span> games won.</span>
+          <span class="h1"><span id="games-won"></span> <span data-i18n="gamesWon">games won</span>.</span>
           </br><hr>
         </div>
       </div>
@@ -54,7 +55,7 @@
     <div class="minesweeper-main">
       <div class="row" style="margin-right: 0px;">
         <div class="col-md-12">
-          <h1>Mines left: <span id="mines-left"></span></h1>
+          <h1><span data-i18n="minesLeft">Mines left</span>: <span id="mines-left"></span></h1>
           <div id="bord"></div>
         </div>
       </div>

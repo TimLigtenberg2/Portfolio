@@ -1,3 +1,5 @@
+const currentLang = localStorage.getItem("preferredLanguage") || "en";
+
 const TYPE_HEARTS = "hearts";
 const TYPE_SPADES = "spades";
 const TYPE_DIAMONDS = "diamonds";
@@ -25,7 +27,7 @@ let drawCardBtn;
 // { amount(int), dice(bool) }
 let drawCards = null;
 
-let luckyNumber;
+let luckyNumber = null;
 // cards in hand
 let cards = [];
 let cardsBot1 = [];
@@ -47,6 +49,12 @@ $(function() {
     // TODO: kaarten pakken en leggen met een mooie animatie doen
     // TODO: regels.txt ANDERE SPECIALE KAARTEN EN REGELS implementeren
 
+    $(window).on('beforeunload', function(){
+        if (luckyNumber != null) {
+            return translations[currentLang].leaveGameWarning;
+        }
+    });
+    
     handCardsDiv = $('#hand-cards');//.sortable();
     handCardsDivBot1 = $('#hand-cards-bot1');
     handCardsDivBot2 = $('#hand-cards-bot2');
@@ -54,7 +62,7 @@ $(function() {
     combinationDiv = $('#combination');
     playCombinationBtn = $("#play-combination-btn");
     drawCardBtn = $("#draw-card-btn");
-    $("#player-turn").html("It's your turn");
+    $("#player-turn").html(translations[currentLang].yourTurn);
 
     //$("#menu").draggable();
     //$("#lucky-number-container").draggable();
@@ -70,7 +78,7 @@ $(function() {
     function initialize() {
         getLuckyNumber();
         $("#draw-buttons").css("display", "flex");
-        //$("#lucky-number").clone().appendTo("#menu");
+        $('#bord').css("display", "block");
         
         createCards(2);
         dealCards(15);
@@ -79,7 +87,7 @@ $(function() {
 
     drawCardBtn.on('click', function(event) {
         if(playerTurn !== 1) {
-            showFeedback("It's not your turn.", "error", 2);
+            showFeedback(translations[currentLang].notYourTurn, "error", 2);
             return;
         }
         if(drawCards === null && event.button == 0) {
@@ -97,7 +105,7 @@ $(function() {
             drawCards = null;
         }
 
-        $(this).html("Draw card");
+        $(this).html(translations[currentLang].drawCard);
         $(this).removeClass("wiebel invert");
     });
 
@@ -123,7 +131,7 @@ function getLuckyNumber() {
             $(this).appendTo("#menu").fadeIn('slow');
             luckyNumberText.html(`
                 <span style='color: white; text-shadow: none;'>
-                    Your lucky number: 
+                    ${translations[currentLang].yourLuckyNumber}: 
                 </span>
                 <span style='text-shadow: 0 0 2px black;'>
                     ${luckyNumber}
@@ -143,7 +151,7 @@ function rollDiceResult(res) {
         return a + b;
     }, 0);
 
-    console.log("aantal pakken:", amount);
+    console.log("Dice result:", amount);
     dealCards(amount);
 }
 
@@ -199,7 +207,7 @@ function getCardValue(num) {
 function dealCards(amount) {
     for (let i = 0; i < amount; i++) {
         if(deck.length === 0) {
-            showFeedback("There are no more cards to draw.", "error", 2);
+            showFeedback(translations[currentLang].noMoreCardsToDraw, "error", 2);
             break;
         }
 
@@ -272,11 +280,11 @@ function getCardView(card) {
 
 function playcard(card, combination = false) {
     if(playerTurn !== 1) {
-        showFeedback("It's not your turn.", "error", 2);
+        showFeedback(translations[currentLang].notYourTurn, "error", 2);
         return;
     }
     if(!combination && !validCard(card)) {
-        showFeedback("You can't play this card.", "error", 2);
+        showFeedback(translations[currentLang].cantPlayCard, "error", 2);
         return;
     }
 
@@ -289,7 +297,7 @@ function playcard(card, combination = false) {
         } else {
             drawCards = { amount: 1, dice: true };
         }
-        drawCardBtn.html(`Draw ${drawCards.amount}x <i class='fa-solid fa-dice'></i> cards!`);
+        drawCardBtn.html(`${translations[currentLang].draw} ${drawCards.amount}x <i class='fa-solid fa-dice'></i> ${translations[currentLang].cards}!`);
         drawCardBtn.addClass("wiebel invert");
     }
     else if(card.type === JOKER || card.value === "A") {
@@ -300,7 +308,7 @@ function playcard(card, combination = false) {
             drawCards = { amount: 3, dice: false };
         }
         
-        drawCardBtn.html(`Draw ${drawCards.amount} cards!`);
+        drawCardBtn.html(`${translations[currentLang].draw} ${drawCards.amount} ${translations[currentLang].cards}!`);
         drawCardBtn.addClass("wiebel invert");
     }
     
@@ -344,7 +352,7 @@ function getCombinationPoints() {
 function addToCombination(card) {
     if(drawCards !== null) return;
     if(card.type === JOKER && combinationCards.find(card => card.type === "JOKER")) {
-        showFeedback("You can't use more than one joker in a combination", "error", 2);
+        showFeedback(translations[currentLang].jokerError1, "error", 2);
         return;
     }
 
@@ -441,7 +449,7 @@ function clearCombination() {
 
 function playCombination() {
     if(playerTurn !== 1) {
-        showFeedback("It's not your turn.", "error", 2);
+        showFeedback(translations[currentLang].notYourTurn, "error", 2);
         return;
     }
 
@@ -454,7 +462,7 @@ function playCombination() {
             clearCombination();
             nextPlayerTurn();
         } else {
-            showFeedback("This is not a valid combination.", "error", 2);
+            showFeedback(translations[currentLang].invalidCombinationError, "error", 2);
         }
     }
 }
@@ -584,9 +592,9 @@ function nextPlayerTurn() {
 
     playerTurn = (playerTurn % 3) + 1;
 
-    if(playerTurn === 1) $("#player-turn").html("It's your turn");
-    else if(playerTurn === 2) $("#player-turn").html("It's bot Marco's turn");
-    else if(playerTurn === 3) $("#player-turn").html("It's bot Willard's turn");
+    if(playerTurn === 1) $("#player-turn").html(translations[currentLang].yourTurn);
+    else if(playerTurn === 2) $("#player-turn").html(translations[currentLang].bot1Turn);
+    else if(playerTurn === 3) $("#player-turn").html(translations[currentLang].bot2Turn);
 
     if(playerTurn === 2 || playerTurn === 3) {
         botsTurn();
@@ -613,21 +621,21 @@ function checkPlayerWon() {
 
 function endGame(winner) {
     let endGameText = $('<span id="endgame-text"></span>');
-    let endGameBtn = $('<button class="blue-button wiebel invert">Click here to start a new game</button>');
+    let endGameBtn = $(`<button class="blue-button wiebel invert">${translations[currentLang].startNewGame}</button>`);
     endGameBtn.click(function() {
         location.reload();
     });
 
     if(winner === 1) {
-        endGameText.html("You won!");
+        endGameText.html(translations[currentLang].youWon);
         endGameText.css("color", "green");
     }
     else if(winner === 2) {
-        endGameText.html("Bot Marco won!");
+        endGameText.html(translations[currentLang].bot1Won);
         endGameText.css("color", "red");
     }
     else if(winner === 3) {
-        endGameText.html("Bot Willard won!");
+        endGameText.html(translations[currentLang].bot2Won);
         endGameText.css("color", "red");
     }
 
@@ -806,7 +814,7 @@ function drawCardBot() {
     dealCardsBot(1);
     nextPlayerTurn();
 
-    $(this).html("Draw card");
+    $(this).html(translations[currentLang].drawCard);
     $(this).removeClass("wiebel invert");
 }
 
@@ -861,10 +869,10 @@ function sortCardsInHand(sortMethod) {
         handCardsDiv.append(getCardView(sortedCard));
     });
 
-    console.log("sortedCards", sortedCards);
+    //console.log("sortedCards", sortedCards);
 }
 
 function setBotHovers() {
-    $('#bot1').attr('title', `${cardsBot1.length} cards`);
-    $('#bot2').attr('title', `${cardsBot2.length} cards`);
+    $('#bot1').attr('title', `${cardsBot1.length} ${translations[currentLang].cards}`);
+    $('#bot2').attr('title', `${cardsBot2.length} ${translations[currentLang].cards}`);
 }

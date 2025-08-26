@@ -9,18 +9,16 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <script src="index.js"></script>
+    <script src="translate.js"></script>
   </head>
   <body>
-      <!--<header class="header">
-        <div class="header-item-container">
-            <span class="header-item-title"><a href="MineSweeper/minesweeper.html">Minesweeper</a></span>
-        </div>
-        <div class="header-item-container">
-          <span class="header-item-title"><a href="CombinAce/combinace.html">Combinace</a></span>
-      </div>
-    </header>-->
+    <div id="language-buttons">
+      <button onclick="setLanguage('en')">English</button>
+      <button onclick="setLanguage('nl')">Nederlands</button>
+    </div>
+    
     <div class="main home">
-      <span class="title">My projects</span>
+      <span class="title" data-i18n="myProjects">My projects</span>
       <ul id="project-list">
         <li>
           <a href="CombinAce/combinace.html">

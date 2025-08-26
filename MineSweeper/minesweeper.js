@@ -5,6 +5,8 @@ Variable Board Shapes: Move away from the traditional square grid and experiment
 3D bord, dus i.p.v. 10*10 blocks, 10*10*10. Dit bestaat al
 */
 
+const currentLang = localStorage.getItem("preferredLanguage") || "en";
+
 const DIFFICULTY_EASY = "Easy";
 const DIFFICULTY_NORMAL = "Normal";
 const DIFFICULTY_HARD = "Hard";
@@ -49,14 +51,14 @@ let timerInterval;
 $(function() {
     $(window).on('beforeunload', function(){
         if (startTime) {
-            return 'Are you sure you want to leave this page? Your current game will not be saved';
+            return translations[currentLang].leaveGameWarning;
         }
     });
 
     let selectElement = $("#difficultySelect");
     DIFFICULTIES.forEach(difficultyI => {
         const option = $('<option>');
-        option.text(difficultyI);
+        option.text(getTranslatedText(difficultyI));
         option.val(difficultyI);
         let savedDifficulty = localStorage.getItem('difficulty');
         if((savedDifficulty && savedDifficulty === difficultyI)) {
@@ -74,7 +76,7 @@ $(function() {
     let selectthemeElement = $("#themeSelect");
     THEMES.forEach(themeI => {
         const option = $('<option>');
-        option.text(themeI);
+        option.text(getTranslatedText(themeI));
         option.val(themeI);
         let savedTheme = localStorage.getItem('theme');
         if((savedTheme && savedTheme === themeI)) {
@@ -452,7 +454,7 @@ function gameOver() {
 
 function gameWon() {
     clearInterval(timerInterval);
-    let alertText = "You won! Time: " + $('#timer').text();
+    let alertText = translations[currentLang].youWonMinesweeper + $('#timer').text();
     let storeGame = {
         difficulty: difficulty,
         time: $('#timer').text(),
@@ -465,13 +467,13 @@ function gameWon() {
         
         let fastestRecord = gamesOfDifficulty.sort((a, b) => a.time.localeCompare(b.time))[0];
         if(!fastestRecord || isTimerLower(storeGame.time, fastestRecord.time)) {
-            alertText += ". It's a new personal record!";
+            alertText += ". " + translations[currentLang].newPR;
         }
 
         gamesArray.push(storeGame);
         localStorage.setItem(wonGamesKey, JSON.stringify(gamesArray));
     } else {
-        alertText += ". It's a new personal record!";
+        alertText += ". " + translations[currentLang].newPR;
         localStorage.setItem(wonGamesKey, JSON.stringify([storeGame]));
     }
 
@@ -480,7 +482,7 @@ function gameWon() {
     
     setTimeout(function() {
         startTime = null;
-        alert(alertText + "\nClick OK to restart.");
+        alert(alertText + "\n" + translations[currentLang].clickOkToRestart);
         location.reload();
     }, 3000);
 }
@@ -619,14 +621,33 @@ function setLeaderboard() {
             gamesArray = gamesArray.sort((a, b) => a.time.localeCompare(b.time));
 
             let gamesListHTML = '<ol>';
-            gamesListHTML += `<h3>Difficulty ${difficulty}</h3>`;
+            gamesListHTML += `<h3>${translations[currentLang].difficulty} ${difficulty}</h3>`;
             gamesArray.forEach(function(game){
-                gamesListHTML += `<li>Time: ${game.time}, On: ${game.day}</li>`;
+                gamesListHTML += `<li>${translations[currentLang].time}: ${game.time}, ${translations[currentLang].on}: ${game.day}</li>`;
             });
             gamesListHTML += '</ol>';
             gamesListDiv.append(gamesListHTML);
         });
     } else {
-        gamesListDiv.append('<p>No games won yet.</p>').show();
+        gamesListDiv.append(`<p>${translations[currentLang].noGamesWonYet}</p>`).show();
+    }
+}
+
+function getTranslatedText(string) {
+    switch (string) {
+        case "Easy":
+            return translations[currentLang].easy;
+        case "Normal":
+            return translations[currentLang].normal;
+        case "Hard":
+            return translations[currentLang].hard;
+        case "Old school":
+            return translations[currentLang].oldSchool;
+        case "Space":
+            return translations[currentLang].space;
+        case "Binary":
+            return translations[currentLang].binary;
+        default:
+            return string;
     }
 }

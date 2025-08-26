@@ -28,45 +28,48 @@
         <!-- My scripts -->
         <script src="../index.js"></script>
         <script src="combinace.js"></script>
+        <script src="../translate.js"></script>
     </head>
     <body>
         <div class="main">
             <header id="menu">
                 <span class="header-item-title" style="margin: 0 10px;"><a href="../index.html">Home</a></span>
-                <a id="show-rules" href="rules.txt" target="_blank">Show rules</a>
+                <a id="show-rules" href="rules.txt" target="_blank" data-i18n="showRules">Show rules</a>
             </header>
 
             <div id="lucky-number-container">
-                <span id="lucky-number-label" style="color:white">Your lucky number</span>
+                <span id="lucky-number-label" style="color:white" data-i18n="yourLuckyNumber">Your lucky number</span>
                 <br />
-                <button id="lucky-number-btn" class="blue-button wiebel invert">Generate</button>
+                <button id="lucky-number-btn" class="blue-button wiebel invert" data-i18n="generate">Generate</button>
                 <span id="lucky-number"></span>
             </div>
 
-            <div id="bord">
+            <div id="bord" style="display: none;">
                 <div id="feedback" style="display: none;">
                     <span id="feedbackMessage"></span>
                     <form method="dialog">
                         <div id="feedbackButtons">
-                            <button id="feedbackDenybtn" class="red-button">Close</button>
+                            <button id="feedbackDenybtn" class="red-button" data-i18n="close">Close</button>
                         </div>
                     </form>
                 </div>
 
                 <span id="player-turn"></span>
                 <div>
-                    <button id="play-combination-btn" class="blue-button wiebel invert" style="display: none;">Play combination</button>
+                    <button id="play-combination-btn" class="wiebel" style="display: none;" data-i18n="playCombination">
+                        Play combination
+                    </button>
                     <div id="combination" style="display: none;"></div>
                 </div>
                 <div id="card-pile"></div>
                 <div id="draw-buttons" style="display: none;">
-                    <button id="draw-card-btn" class="red-button" style="background: rgb(190, 26, 26);">Draw a card</button>
+                    <button id="draw-card-btn" class="red-button" style="background: rgb(190, 26, 26);" data-i18n="drawAcard">Draw a card</button>
                 </div>
                 <div id="hand-cards"></div>
 
                 <div id="sortBtnsDiv">
-                    <button id="sort1Btn" onclick="sortCardsInHand(1)">Sort by number</button>
-                    <button id="sort2Btn" onclick="sortCardsInHand(2)">Sort by type</button>
+                    <button id="sort1Btn" onclick="sortCardsInHand(1)" data-i18n="sortByNumber">Sort by number</button>
+                    <button id="sort2Btn" onclick="sortCardsInHand(2)" data-i18n="sortByType">Sort by type</button>
                 </div>
 
                 <div id="bot1">
