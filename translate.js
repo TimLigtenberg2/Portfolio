@@ -38,12 +38,12 @@ const translations = {
     cards: "cards",
     jokerError1: "You can't use more than one joker in a combination",
     invalidCombinationError: "This is not a valid combination.",
-    bot1Turn: "It's bot Carl's turn",
-    bot2Turn: "It's bot Jesse's turn",
+    bot1Turn: "It's bot Marco's turn",
+    bot2Turn: "It's bot Willard's turn",
     startNewGame: "Click here to start a new game",
     youWon: "You won!",
-    bot1Won: "Bot Carl won!",
-    bot2Won: "Bot Jesse won!"
+    bot1Won: "Bot Marco won!",
+    bot2Won: "Bot Willard won!"
   },
   nl: {
     myProjects: "Mijn projecten",
