@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="nl">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Mastermind Tim Ligtenberg</title>
+        <link rel="icon" href="../assets/mastermind/MastermindPinCyaan.png" type="image/gif" >
+
+        <!-- Styles to use everywhere -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+        <!-- My styles -->
+        <link rel="stylesheet" href="../style.css">
+        <link rel="stylesheet" href="mastermind.css">
+
+        <!-- Scripts to use everywhere -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+        <script src="https://kit.fontawesome.com/fadd34b0e1.js" crossorigin="anonymous"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+        <!-- My scripts -->
+        <script src="../index.js"></script>
+        <script src="mastermind.js"></script>
+        <script src="../translate.js"></script>
+    </head>
+    <body>
+        <div id="board">
+            <div id="row9" class="guess-row">
+                <div id="row9block0" class="guess-block"></div>
+                <div id="row9block1" class="guess-block"></div>
+                <div id="row9block2" class="guess-block"></div>
+                <div id="row9block3" class="guess-block"></div>
+                
+                <div id="row9feedback" class="feedback-container">
+                    <div id="row9feedbackblock0" class="feedback-block"></div>
+                    <div id="row9feedbackblock1" class="feedback-block"></div>
+                    <div id="row9feedbackblock2" class="feedback-block"></div>
+                    <div id="row9feedbackblock3" class="feedback-block"></div>
+                </div>
+            </div>
+            <div id="row8" class="guess-row">
+                <div id="row8block0" class="guess-block"></div>
+                <div id="row8block1" class="guess-block"></div>
+                <div id="row8block2" class="guess-block"></div>
+                <div id="row8block3" class="guess-block"></div>
+            
+                <div id="row8feedback" class="feedback-container">
+                    <div id="row8feedbackblock0" class="feedback-block"></div>
+                    <div id="row8feedbackblock1" class="feedback-block"></div>
+                    <div id="row8feedbackblock2" class="feedback-block"></div>
+                    <div id="row8feedbackblock3" class="feedback-block"></div>
+                </div>
+            </div>
+            <div id="row7" class="guess-row">
+                <div id="row7block0" class="guess-block"></div>
+                <div id="row7block1" class="guess-block"></div>
+                <div id="row7block2" class="guess-block"></div>
+                <div id="row7block3" class="guess-block"></div>
+            
+                <div id="row7feedback" class="feedback-container">
+                    <div id="row7feedbackblock0" class="feedback-block"></div>
+                    <div id="row7feedbackblock1" class="feedback-block"></div>
+                    <div id="row7feedbackblock2" class="feedback-block"></div>
+                    <div id="row7feedbackblock3" class="feedback-block"></div>
+                </div>
+            </div>
+            <div id="row6" class="guess-row">
+                <div id="row6block0" class="guess-block"></div>
+                <div id="row6block1" class="guess-block"></div>
+                <div id="row6block2" class="guess-block"></div>
+                <div id="row6block3" class="guess-block"></div>
+            
+                <div id="row6feedback" class="feedback-container">
+                    <div id="row6feedbackblock0" class="feedback-block"></div>
+                    <div id="row6feedbackblock1" class="feedback-block"></div>
+                    <div id="row6feedbackblock2" class="feedback-block"></div>
+                    <div id="row6feedbackblock3" class="feedback-block"></div>
+                </div>
+            </div>
+            <div id="row5" class="guess-row">
+                <div id="row5block0" class="guess-block"></div>
+                <div id="row5block1" class="guess-block"></div>
+                <div id="row5block2" class="guess-block"></div>
+                <div id="row5block3" class="guess-block"></div>
+            
+                <div id="row5feedback" class="feedback-container">
+                    <div id="row5feedbackblock0" class="feedback-block"></div>
+                    <div id="row5feedbackblock1" class="feedback-block"></div>
+                    <div id="row5feedbackblock2" class="feedback-block"></div>
+                    <div id="row5feedbackblock3" class="feedback-block"></div>
+                </div>
+            </div>
+            <div id="row4" class="guess-row">
+                <div id="row4block0" class="guess-block"></div>
+                <div id="row4block1" class="guess-block"></div>
+                <div id="row4block2" class="guess-block"></div>
+                <div id="row4block3" class="guess-block"></div>
+            
+                <div id="row4feedback" class="feedback-container">
+                    <div id="row4feedbackblock0" class="feedback-block"></div>
+                    <div id="row4feedbackblock1" class="feedback-block"></div>
+                    <div id="row4feedbackblock2" class="feedback-block"></div>
+                    <div id="row4feedbackblock3" class="feedback-block"></div>
+                </div>
+            </div>
+            <div id="row3" class="guess-row">
+                <div id="row3block0" class="guess-block"></div>
+                <div id="row3block1" class="guess-block"></div>
+                <div id="row3block2" class="guess-block"></div>
+                <div id="row3block3" class="guess-block"></div>
+            
+                <div id="row3feedback" class="feedback-container">
+                    <div id="row3feedbackblock0" class="feedback-block"></div>
+                    <div id="row3feedbackblock1" class="feedback-block"></div>
+                    <div id="row3feedbackblock2" class="feedback-block"></div>
+                    <div id="row3feedbackblock3" class="feedback-block"></div>
+                </div>
+            </div>
+            <div id="row2" class="guess-row">
+                <div id="row2block0" class="guess-block"></div>
+                <div id="row2block1" class="guess-block"></div>
+                <div id="row2block2" class="guess-block"></div>
+                <div id="row2block3" class="guess-block"></div>
+            
+                <div id="row2feedback" class="feedback-container"">
+                    <div id="row2feedbackblock0" class="feedback-block"></div>
+                    <div id="row2feedbackblock1" class="feedback-block"></div>
+                    <div id="row2feedbackblock2" class="feedback-block"></div>
+                    <div id="row2feedbackblock3" class="feedback-block"></div>
+                </div>
+            </div>
+            <div id="row1" class="guess-row">
+                <div id="row1block0" class="guess-block"></div>
+                <div id="row1block1" class="guess-block"></div>
+                <div id="row1block2" class="guess-block"></div>
+                <div id="row1block3" class="guess-block"></div>
+            
+                <div id="row1feedback" class="feedback-container">
+                    <div id="row1feedbackblock0" class="feedback-block"></div>
+                    <div id="row1feedbackblock1" class="feedback-block"></div>
+                    <div id="row1feedbackblock2" class="feedback-block"></div>
+                    <div id="row1feedbackblock3" class="feedback-block"></div>
+                </div>
+            </div>
+            <div id="row0" class="guess-row">
+                <div id="row0block0" class="guess-block"></div>
+                <div id="row0block1" class="guess-block"></div>
+                <div id="row0block2" class="guess-block"></div>
+                <div id="row0block3" class="guess-block"></div>
+            
+                <div id="row0feedback" class="feedback-container">
+                    <div id="row0feedbackblock0" class="feedback-block"></div>
+                    <div id="row0feedbackblock1" class="feedback-block"></div>
+                    <div id="row0feedbackblock2" class="feedback-block"></div>
+                    <div id="row0feedbackblock3" class="feedback-block"></div>
+                </div>
+            </div>
+        </div>
+        <div id="pins-container">
+            <div style="width: 360px; height: 60px;">
+                <button onclick="pinClicked(0)" class="pin-button" style="background-image: url('../assets/mastermind/MastermindPinBruin.png');"></button>
+                <button onclick="pinClicked(1)" class="pin-button" style="background-image: url('../assets/mastermind/MastermindPinCyaan.png');"></button>
+                <button onclick="pinClicked(2)" class="pin-button" style="background-image: url('../assets/mastermind/MastermindPinDonkerBlauw.png');"></button>
+                <button onclick="pinClicked(3)" class="pin-button" style="background-image: url('../assets/mastermind/MastermindPinDonkerGroen.png');"></button>
+                <button onclick="pinClicked(4)" class="pin-button" style="background-image: url('../assets/mastermind/MastermindPinGeel.png');"></button>
+                <button onclick="pinClicked(5)" class="pin-button" style="background-image: url('../assets/mastermind/MastermindPinLichtBlauw.png');"></button>
+            </div>
+            <div style="width: 360px; height: 60px;">
+                <button onclick="pinClicked(6)" class="pin-button" style="background-image: url('../assets/mastermind/MastermindPinLichtGroen.png');"></button>
+                <button onclick="pinClicked(7)" class="pin-button" style="background-image: url('../assets/mastermind/MastermindPinOranje.png');"></button>
+                <button onclick="pinClicked(8)" class="pin-button" style="background-image: url('../assets/mastermind/MastermindPinPaars.png');"></button>
+                <button onclick="pinClicked(9)" class="pin-button" style="background-image: url('../assets/mastermind/MastermindPinRood.png');"></button>
+                <button onclick="pinClicked(10)" class="pin-button" style="background-image: url('../assets/mastermind/MastermindPinRoze.png');"></button>
+                <button onclick="pinClicked(11)" class="pin-button" style="background-image: url('../assets/mastermind/MastermindPinWit.png');"></button>
+            </div>
+        </div>
+        BLACK PIN = correct color and position<br>
+        WHITE PIN = correct color, wrong position<br>
+        First the black pins are displayed, then the white pins. So not based on the order you placed them.
+    </body>
+</html>
