@@ -43,7 +43,8 @@ const translations = {
     startNewGame: "Click here to start a new game",
     youWon: "You won!",
     bot1Won: "Bot Marco won!",
-    bot2Won: "Bot Willard won!"
+    bot2Won: "Bot Willard won!",
+    correctCode: "The correct code was",
   },
   nl: {
     myProjects: "Mijn projecten",
@@ -89,7 +90,8 @@ const translations = {
     startNewGame: "Klik hier om een nieuw spel te starten",
     youWon: "Je hebt gewonnen!",
     bot1Won: "Bot Marco heeft gewonnen!",
-    bot2Won: "Bot Willard heeft gewonnen!"
+    bot2Won: "Bot Willard heeft gewonnen!",
+    correctCode: "De juiste code was",
   }
 };
 

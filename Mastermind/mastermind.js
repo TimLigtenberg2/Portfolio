@@ -24,6 +24,7 @@ function initialize() {
     code = [];
 
     generateCode();
+    clearBoard();
 }
 
 function generateCode() {
@@ -31,6 +32,17 @@ function generateCode() {
         code.push(Math.floor(Math.random() * 12));
     }
     console.log(code);
+}
+
+function clearBoard() {
+    for (let row = 0; row < 10; row++) {
+        for (let block = 0; block < 4; block++) {
+            $(`#row${row}block${block}`).css("background-image", "none");
+            $(`#row${row}feedbackblock${block}`).css("background-image", "none");
+        }
+        $(`#row${row}`).css("background-image", "none");
+        $(`#row${row}feedback`).css("background-image", "none");
+    }
 }
 
 function pinClicked(pinNumber) {
@@ -62,12 +74,13 @@ function checkGuess() {
 
     console.log("User's guess:", currentGuess);
 
-    if (currentGuess === code) {
-        alert("You won.");
-        return
-    }
-
     showFeedbackPins();
+
+    if (arraysAreEqual(currentGuess, code)) {
+        alert(translations[currentLang].youWon);
+        initialize();
+        return;
+    }
 
     let nextRowIndex = parseInt(currentRow.attr("id").replace("row", "")) + 1;
     if (nextRowIndex <= 9) {
@@ -76,8 +89,22 @@ function checkGuess() {
         currentBlock = $("#row" + nextRowIndex + "block0");
         currentGuess = [];
     } else {
-        alert("Game over.");
+        alert(
+            `Game over. ${translations[currentLang].correctCode}: 
+            ${code.map(num => getColorNameTranslated(num)).join(", ")}`
+        );
+        initialize();
     }
+}
+
+function arraysAreEqual(arr1, arr2) {
+  if (arr1.length !== arr2.length) return false;
+
+  for (let i = 0; i < arr1.length; i++) {
+    if (arr1[i] !== arr2[i]) return false;
+  }
+
+  return true;
 }
 
 function showFeedbackPins() {
@@ -147,6 +174,37 @@ function getColorName(pinNumber) {
             return "Roze";
         case 11:
             return "Wit";
+        default:
+            return "";
+    }
+}
+
+function getColorNameTranslated(pinNumber) {
+    switch (pinNumber) {
+        case 0:
+            return currentLang == "en" ? "Brown" : "Bruin";
+        case 1:
+            return currentLang == "en" ? "Cyan" : "Cyaan";
+        case 2:
+            return currentLang == "en" ? "Dark blue" : "Donkerblauw";
+        case 3:
+            return currentLang == "en" ? "Dark green" : "Donkergroen";
+        case 4:
+            return currentLang == "en" ? "Yellow" : "Geel";
+        case 5:
+            return currentLang == "en" ? "Light blue" : "Lichtblauw";
+        case 6:
+            return currentLang == "en" ? "Light green" : "Lichtgroen";
+        case 7:
+            return currentLang == "en" ? "Orange" : "Oranje";
+        case 8:
+            return currentLang == "en" ? "Purple" : "Paars";
+        case 9:
+            return currentLang == "en" ? "Red" : "Rood";
+        case 10:
+            return currentLang == "en" ? "Pink" : "Roze";
+        case 11:
+            return currentLang == "en" ? "White" : "Wit";
         default:
             return "";
     }
