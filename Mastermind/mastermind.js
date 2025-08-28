@@ -116,7 +116,7 @@ function showFeedbackPins() {
     // First pass: check for correct color and position (black pins)
     for (let i = 0; i < 4; i++) {
         if (guessCopy[i] === codeCopy[i]) {
-            feedback.push('black');
+            feedback.push('green');
             guessCopy[i] = codeCopy[i] = null; // Mark as matched
         }
     }
@@ -126,7 +126,7 @@ function showFeedbackPins() {
         if (guessCopy[i] !== null) {
             let idx = codeCopy.indexOf(guessCopy[i]);
             if (idx !== -1) {
-                feedback.push('white');
+                feedback.push('yellow');
                 codeCopy[idx] = null; // Mark as matched
             }
         }
@@ -137,12 +137,12 @@ function showFeedbackPins() {
         let pinType = feedback[i];
         let feedbackBlock = $(`#${currentRowFeedback.attr("id")}block${i}`);
         let imgSrc = '';
-        if (pinType === 'black') {
-            imgSrc = "../assets/mastermind/MastermindCorrect2Pin.png";
-        } else if (pinType === 'white') {
-            imgSrc = "../assets/mastermind/MastermindCorrect1Pin.png";
+        if (pinType === 'green') {
+            imgSrc = "../assets/mastermind/MastermindGroenVinkje.png";
+        } else if (pinType === 'yellow') {
+            imgSrc = "../assets/mastermind/MastermindGeleWaarschuwing.png";
         } else {
-            imgSrc = ""; // No image for empty
+            imgSrc = "../assets/mastermind/MastermindRoodKruis.png";
         }
         feedbackBlock.css("background-image", imgSrc ? `url('${imgSrc}')` : "none");
     }
