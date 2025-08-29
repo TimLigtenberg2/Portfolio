@@ -1,4 +1,5 @@
 const currentLang = localStorage.getItem("preferredLanguage") || "en";
+const wonGamesKeyMM = btoa('wonGamesMM');
 
 let currentRow = $("#row0");
 let currentRowFeedback = $("#row0feedback");
@@ -25,6 +26,7 @@ function initialize() {
 
     generateCode();
     clearBoard();
+    showGamesWon();
 }
 
 function generateCode() {
@@ -84,8 +86,7 @@ function checkGuess() {
     showFeedbackPins();
 
     if (arraysAreEqual(currentGuess, code)) {
-        alert(translations[currentLang].youWon);
-        initialize();
+        gameWon();
         return;
     }
 
@@ -97,11 +98,7 @@ function checkGuess() {
         currentBlock = $("#row" + nextRowIndex + "block0");
         currentGuess = [null, null, null, null];
     } else {
-        alert(
-            `Game over. ${translations[currentLang].correctCode}: 
-            ${code.map(num => getColorNameTranslated(num)).join(", ")}`
-        );
-        initialize();
+        gameLost();
     }
 }
 
@@ -224,4 +221,23 @@ function getColorNameTranslated(pinNumber) {
         default:
             return "";
     }
+}
+
+function gameWon() {
+    let gamesWonCount = localStorage.getItem(wonGamesKeyMM) ? parseInt(localStorage.getItem(wonGamesKeyMM)) : 0;
+    localStorage.setItem(wonGamesKeyMM, gamesWonCount + 1);
+    alert(translations[currentLang].youWon);
+    initialize();
+}
+
+function gameLost() {
+    alert(
+        `Game over. ${translations[currentLang].correctCode}: 
+        ${code.map(num => getColorNameTranslated(num)).join(", ")}`
+    );
+    initialize();
+}
+
+function showGamesWon() {
+    $("#games-won").text(localStorage.getItem(wonGamesKeyMM) ? parseInt(localStorage.getItem(wonGamesKeyMM)) : 0);
 }

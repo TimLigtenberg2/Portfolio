@@ -74,3 +74,11 @@ body {
     border: 0;
     border-top: 1px solid #ab785a;
 }
+
+#games-won-text {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    font-size: 3vw;
+    font-weight: bold;
+}

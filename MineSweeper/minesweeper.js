@@ -36,7 +36,7 @@ const difficultyMineAmount = {
     [DIFFICULTY_HARD]: 120
 };
 
-const wonGamesKey = btoa('wonGames');
+const wonGamesKey = btoa('wonGamesMS');
 
 let blocks = [];
 let difficulty;
@@ -60,7 +60,7 @@ $(function() {
         const option = $('<option>');
         option.text(getTranslatedText(difficultyI));
         option.val(difficultyI);
-        let savedDifficulty = localStorage.getItem('difficulty');
+        let savedDifficulty = localStorage.getItem('DifficultyMS');
         if((savedDifficulty && savedDifficulty === difficultyI)) {
             option.prop('selected', true);
             difficulty = difficultyI;
@@ -78,7 +78,7 @@ $(function() {
         const option = $('<option>');
         option.text(getTranslatedText(themeI));
         option.val(themeI);
-        let savedTheme = localStorage.getItem('theme');
+        let savedTheme = localStorage.getItem('ThemeMS');
         if((savedTheme && savedTheme === themeI)) {
             option.prop('selected', true);
             theme = themeI;
@@ -110,13 +110,13 @@ $(function() {
         blockAmount = difficultyBlockRowAmount[difficulty];
         mineAmount = difficultyMineAmount[difficulty];
         numberBlocksLeft = blockAmount * blockAmount - mineAmount;
-        localStorage.setItem('difficulty', difficulty);
+        localStorage.setItem('DifficultyMS', difficulty);
     
         initialize();
     });
 
     $("#themeSelect").on("change", function() {
-        localStorage.setItem('theme', this.value);
+        localStorage.setItem('ThemeMS', this.value);
         if(SPECIAL_THEMES.includes(theme) || SPECIAL_THEMES.includes(this.value)) {
             location.reload();
         } else {
