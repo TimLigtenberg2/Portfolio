@@ -6,10 +6,11 @@ let currentRowFeedback = $("#row0feedback");
 let currentBlock = $("#row0block0");
 let currentGuess = [null, null, null, null];
 let code = [];
+let gameIsActive = false;
 
 $(function() {
     $(window).on('beforeunload', function(){
-        if (code.length > 0) {
+        if (gameIsActive && currentBlock.attr("id") != "row0block0") {
             return translations[currentLang].leaveGameWarning;
         }
     });
@@ -27,6 +28,7 @@ function initialize() {
     generateCode();
     clearBoard();
     showGamesWon();
+    gameIsActive = true;
 }
 
 function generateCode() {
@@ -47,6 +49,8 @@ function clearBoard() {
 }
 
 function pinClicked(pinNumber) {
+    if (!gameIsActive) return;
+
     var guessIndex = currentGuess.indexOf(null);
     currentGuess[guessIndex] = pinNumber;
     $(currentBlock).css({
@@ -65,6 +69,8 @@ function pinClicked(pinNumber) {
 }
 
 function removePin(block, guessIndex) {
+    if (!gameIsActive) return;
+
     currentGuess[guessIndex] = null;
     $(block).css({
         "background-image": "none",
@@ -224,18 +230,25 @@ function getColorNameTranslated(pinNumber) {
 }
 
 function gameWon() {
+    gameIsActive = false;
     let gamesWonCount = localStorage.getItem(wonGamesKeyMM) ? parseInt(localStorage.getItem(wonGamesKeyMM)) : 0;
     localStorage.setItem(wonGamesKeyMM, gamesWonCount + 1);
-    alert(translations[currentLang].youWon);
-    initialize();
+
+    setTimeout(() => {
+        alert(translations[currentLang].youWon);
+        initialize();
+    }, 1500);
 }
 
 function gameLost() {
-    alert(
-        `Game over. ${translations[currentLang].correctCode}: 
-        ${code.map(num => getColorNameTranslated(num)).join(", ")}`
-    );
-    initialize();
+    gameIsActive = false;
+    setTimeout(() => {
+        alert(
+            `Game over. ${translations[currentLang].correctCode}: 
+            ${code.map(num => getColorNameTranslated(num)).join(", ")}`
+        );
+        initialize();
+    }, 1500);
 }
 
 function showGamesWon() {
