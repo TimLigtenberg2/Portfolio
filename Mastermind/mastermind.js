@@ -3,7 +3,7 @@ const currentLang = localStorage.getItem("preferredLanguage") || "en";
 let currentRow = $("#row0");
 let currentRowFeedback = $("#row0feedback");
 let currentBlock = $("#row0block0");
-let currentGuess = [];
+let currentGuess = [null, null, null, null];
 let code = [];
 
 $(function() {
@@ -20,7 +20,7 @@ function initialize() {
     currentRow = $("#row0");
     currentRowFeedback = $("#row0feedback");
     currentBlock = $("#row0block0");
-    currentGuess = [];
+    currentGuess = [null, null, null, null];
     code = [];
 
     generateCode();
@@ -31,7 +31,6 @@ function generateCode() {
     for (let i = 0; i < 4; i++) {
         code.push(Math.floor(Math.random() * 12));
     }
-    console.log(code);
 }
 
 function clearBoard() {
@@ -46,33 +45,41 @@ function clearBoard() {
 }
 
 function pinClicked(pinNumber) {
-    currentGuess.push(pinNumber);
-    currentBlock.css("background-image", `url('../assets/mastermind/MastermindPin${getColorName(pinNumber)}.png')`);
+    var guessIndex = currentGuess.indexOf(null);
+    currentGuess[guessIndex] = pinNumber;
+    $(currentBlock).css({
+        'background-image': `url('../assets/mastermind/MastermindPin${getColorName(pinNumber)}.png')`,
+        'cursor': 'pointer'
+    });
+    $(currentBlock).on('click', function() {
+        removePin(this, guessIndex);
+    });
 
-    if (currentGuess.length == 4) {
+    if (currentGuess.length == 4 && currentGuess.every(int => int != null)) {
         checkGuess();
     } else {
-        let currentBlockId = currentBlock.attr("id");
-        currentBlock = $(`#${currentRow.attr("id")}block${parseInt(currentBlockId.charAt(currentBlockId.length - 1)) + 1}`);
+        currentBlock = getNewBlockElement();
     }
 }
 
-// TODO:
-function removePin() {
-    if (currentGuess.length == 0) {
-        return;
-    }
+function removePin(block, guessIndex) {
+    currentGuess[guessIndex] = null;
+    $(block).css({
+        "background-image": "none",
+        "cursor": "default"
+    });
+    $(block).off('click');
+    currentBlock = getNewBlockElement();
+}
 
-    currentGuess.pop();
-    // TODO: remove image from previous block
+function getNewBlockElement() {
+    return $(`#${currentRow.attr("id")}block${currentGuess.indexOf(null)}`);
 }
 
 function checkGuess() {
-    if (currentGuess.length < 4) {
+    if (currentGuess.length < 4 || currentGuess.some(number => number == null)) {
         return;
     }
-
-    console.log("User's guess:", currentGuess);
 
     showFeedbackPins();
 
@@ -84,16 +91,25 @@ function checkGuess() {
 
     let nextRowIndex = parseInt(currentRow.attr("id").replace("row", "")) + 1;
     if (nextRowIndex <= 9) {
+        makeRowNotInteractive(nextRowIndex - 1);
         currentRow = $("#row" + nextRowIndex);
         currentRowFeedback = $("#row" + nextRowIndex + "feedback");
         currentBlock = $("#row" + nextRowIndex + "block0");
-        currentGuess = [];
+        currentGuess = [null, null, null, null];
     } else {
         alert(
             `Game over. ${translations[currentLang].correctCode}: 
             ${code.map(num => getColorNameTranslated(num)).join(", ")}`
         );
         initialize();
+    }
+}
+
+function makeRowNotInteractive(rowIndex) {
+    for (let i = 0; i < 4; i++) {
+        let block = $(`#row${rowIndex}block${i}`);
+        $(block).css("cursor", 'default');
+        $(block).off('click');
     }
 }
 
