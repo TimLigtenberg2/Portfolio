@@ -32,8 +32,11 @@ function initialize() {
 }
 
 function generateCode() {
-    for (let i = 0; i < 4; i++) {
-        code.push(Math.floor(Math.random() * 12));
+    while (code.length < 4) {
+        const num = Math.floor(Math.random() * 12);
+        if (!code.includes(num)) {
+            code.push(num);
+        }
     }
 }
 
@@ -50,6 +53,7 @@ function clearBoard() {
 
 function pinClicked(pinNumber) {
     if (!gameIsActive) return;
+    if (currentGuess.includes(pinNumber)) return;
 
     var guessIndex = currentGuess.indexOf(null);
     currentGuess[guessIndex] = pinNumber;
@@ -98,21 +102,9 @@ function checkGuess() {
 
     let nextRowIndex = parseInt(currentRow.attr("id").replace("row", "")) + 1;
     if (nextRowIndex <= 9) {
-        makeRowNotInteractive(nextRowIndex - 1);
-        currentRow = $("#row" + nextRowIndex);
-        currentRowFeedback = $("#row" + nextRowIndex + "feedback");
-        currentBlock = $("#row" + nextRowIndex + "block0");
-        currentGuess = [null, null, null, null];
+        nextRow(nextRowIndex);
     } else {
         gameLost();
-    }
-}
-
-function makeRowNotInteractive(rowIndex) {
-    for (let i = 0; i < 4; i++) {
-        let block = $(`#row${rowIndex}block${i}`);
-        $(block).css("cursor", 'default');
-        $(block).off('click');
     }
 }
 
@@ -249,6 +241,22 @@ function gameLost() {
         );
         initialize();
     }, 1500);
+}
+
+function nextRow(nextRowIndex) {
+    makeRowNotInteractive(nextRowIndex - 1);
+    currentRow = $("#row" + nextRowIndex);
+    currentRowFeedback = $("#row" + nextRowIndex + "feedback");
+    currentBlock = $("#row" + nextRowIndex + "block0");
+    currentGuess = [null, null, null, null];
+}
+
+function makeRowNotInteractive(rowIndex) {
+    for (let i = 0; i < 4; i++) {
+        let block = $(`#row${rowIndex}block${i}`);
+        $(block).css("cursor", 'default');
+        $(block).off('click');
+    }
 }
 
 function showGamesWon() {
