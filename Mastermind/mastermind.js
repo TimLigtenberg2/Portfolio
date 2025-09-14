@@ -15,6 +15,13 @@ $(function() {
         }
     });
 
+    $('.pin-button').each(function(index, element) {
+        $(element).on('contextmenu', function(event) {
+            event.preventDefault();
+            hidePin(index, element);
+        });
+    });
+
     initialize();
 });
 
@@ -27,6 +34,7 @@ function initialize() {
 
     generateCode();
     clearBoard();
+    showAllPins();
     showGamesWon();
     gameIsActive = true;
 }
@@ -261,4 +269,21 @@ function makeRowNotInteractive(rowIndex) {
 
 function showGamesWon() {
     $("#games-won").text(localStorage.getItem(wonGamesKeyMM) ? parseInt(localStorage.getItem(wonGamesKeyMM)) : 0);
+}
+
+// Function to hide/show pin on right-click
+function hidePin(index, element) {
+    if (!gameIsActive) return;
+
+    if ($(element).css('background-image').includes("MastermindRoodKruis.png")) {
+        $(element).css('background-image', `url('../assets/mastermind/MastermindPin${getColorName(index)}.png')`);
+    } else {
+        $(element).css('background-image', `url('../assets/mastermind/MastermindRoodKruis.png')`);
+    }
+}
+
+function showAllPins() {
+    $('.pin-button').each(function(index, element) {
+        $(element).css('background-image', `url('../assets/mastermind/MastermindPin${getColorName(index)}.png')`);
+    });
 }
