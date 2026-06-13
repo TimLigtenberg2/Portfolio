@@ -38,6 +38,8 @@ let combinationCards = [];
 let cardPile = [];
 // who's turn it is. 1 means it's your turn. 2 and 3 are the bots
 let playerTurn = 1;
+// true if it's a bot's turn and bot is in 3s delay before doing his move.
+let unoStillPosible = false;
 
 $(function() {
     // TODO: dobbelstenen totaal aantal laten zien. Misschien met dobbelsteen groot weergeven wat die heeft gegooid en uiteindelijk de som groot weerwGEVEN
@@ -279,11 +281,17 @@ function getCardView(card) {
 }
 
 function playcard(card, combination = false) {
-    if(playerTurn !== 1) {
+    let lastCard = cardPile[cardPile.length - 1];
+    let unoRuleApplies = lastCard && lastCard.type === card.type && lastCard.value === card.value;
+
+    if (unoRuleApplies && unoStillPosible) {
+        playerTurn = 1;
+    }
+    else if (playerTurn !== 1) {
         showFeedback(translations[currentLang].notYourTurn, "error", 2);
         return;
     }
-    if(!combination && !validCard(card)) {
+    else if (!combination && !validCard(card)) {
         showFeedback(translations[currentLang].cantPlayCard, "error", 2);
         return;
     }
@@ -592,11 +600,15 @@ function nextPlayerTurn() {
 
     playerTurn = (playerTurn % 3) + 1;
 
-    if(playerTurn === 1) $("#player-turn").html(translations[currentLang].yourTurn);
+    if(playerTurn === 1) {
+        $("#player-turn").html(translations[currentLang].yourTurn);
+        $("#draw-buttons").css("display", "flex");
+    }
     else if(playerTurn === 2) $("#player-turn").html(translations[currentLang].bot1Turn);
     else if(playerTurn === 3) $("#player-turn").html(translations[currentLang].bot2Turn);
 
     if(playerTurn === 2 || playerTurn === 3) {
+        $("#draw-buttons").css("display", "none");
         botsTurn();
     }
 }
@@ -724,35 +736,52 @@ function getCardViewBot(card) {
 
 function botsTurn() {
     let cardPlayed = false;
+    unoStillPosible = true;
 
     setTimeout(function() {
         if(playerTurn === 2) {
-            cardPlayed = botPlayCardIfPossible(cardsBot1);
+            setTimeout(() => {
+                // If no one else played card with UNO rule
+                if(playerTurn === 2) {
+                    unoStillPosible = false;
+                    cardPlayed = botPlayCardIfPossible(cardsBot1);
+                    ifNoCardPlayed();
+                } else return;
+            }, 3000);
         }
         else if (playerTurn === 3) {
-            cardPlayed = botPlayCardIfPossible(cardsBot2);
+            setTimeout(() => {
+                // If no one else played card with UNO rule
+                if (playerTurn === 3) {
+                    unoStillPosible = false;
+                    cardPlayed = botPlayCardIfPossible(cardsBot2);
+                    ifNoCardPlayed();
+                } else return;
+            }, 3000);
         }
 
-        if(!cardPlayed) {
-            setTimeout(function() {
-                if(drawCards !== null) {
-                    if(drawCards.dice) {
-                        rollDiceToDrawBot(drawCards.amount);
-                    } else {
-                        dealCardsBot(drawCards.amount);
-                    }
-        
-                    drawCards = null;
-        
-                    $("#draw-card-btn").html("Draw card");
-                    $("#draw-card-btn").removeClass("wiebel invert");
+        function ifNoCardPlayed() {
+            if(!cardPlayed) {
+                setTimeout(function() {
+                    if(drawCards !== null) {
+                        if(drawCards.dice) {
+                            rollDiceToDrawBot(drawCards.amount);
+                        } else {
+                            dealCardsBot(drawCards.amount);
+                        }
+            
+                        drawCards = null;
+            
+                        $("#draw-card-btn").html("Draw card");
+                        $("#draw-card-btn").removeClass("wiebel invert");
 
-                    // bot had to draw some cards but still still has to do his turn
-                    botsTurn();
-                } else {
-                    drawCardBot();
-                }
-            }, 1000);
+                        // bot had to draw some cards but still has to do his turn
+                        botsTurn();
+                    } else {
+                        drawCardBot();
+                    }
+                }, 1000);
+            }
         }
     }, 1000);
 }
