@@ -45,10 +45,6 @@ $(function() {
     // TODO: dobbelstenen totaal aantal laten zien. Misschien met dobbelsteen groot weergeven wat die heeft gegooid en uiteindelijk de som groot weerwGEVEN
     // TODO: duidelijker weergeven de totale punten van de combinatie
     // TODO: duidelijker weergeven dat de A helemaal naar rechts gesleept moet worden om er 12 punten van te maken
-    // TODO: mooie dobbelstenen zelf maken
-    // TODO: comments allemaal engels maken
-    // TODO: alle kaarten 'pile' laten zien en er zichtbaar één afhalen wanneer je een kaart pakt
-    // TODO: kaarten pakken en leggen met een mooie animatie doen
     // TODO: regels.txt ANDERE SPECIALE KAARTEN EN REGELS implementeren
 
     $(window).on('beforeunload', function(){
@@ -359,7 +355,7 @@ function getCombinationPoints() {
 
 function addToCombination(card) {
     if(drawCards !== null) return;
-    if(card.type === JOKER && combinationCards.find(card => card.type === "JOKER")) {
+    if(card.type === JOKER && combinationCards.find(card => card.type === JOKER)) {
         showFeedback(translations[currentLang].jokerError1, "error", 2);
         return;
     }
@@ -498,7 +494,7 @@ function validStraatje() {
     // TODO: A, A, 2, 3, 4 werkt niet
     if (!combinationCards || combinationCards.length < 3) return false;
 
-    let nonSpecialCards = combinationCards.filter(card => card.type !== "JOKER" && card.value !== "A");
+    let nonSpecialCards = combinationCards.filter(card => card.type !== JOKER && card.value !== "A");
     nonSpecialCards.sort((a, b) => a.cardNumber - b.cardNumber);
 
     // sorteren op kaartnumber klein naar groot
@@ -563,7 +559,7 @@ function validStraatje() {
 function validxOfaKind() {
     if(combinationCards.length < 3) return false;
 
-    let nonSpecialCards = combinationCards.filter(card => card.type !== "JOKER" && card.value !== "A");
+    let nonSpecialCards = combinationCards.filter(card => card.type !== JOKER && card.value !== "A");
     // TODO: je mag nu niet een combinatie hebben van alleen maar As (en een joker). moet wel kunnen
     if(nonSpecialCards.length === 0) return false;
 
